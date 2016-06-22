@@ -29,11 +29,12 @@ class BC_Video_Shortcode {
 			'video_id'   => '',
 			'height'     => 0,
 			'width'      => 0,
+			'autoplay'   => false
 		);
 
 		$atts = shortcode_atts( $defaults, $atts, 'bc_video' );
 
-		return BC_Utility::player( 'video', $atts['video_id'], $atts['account_id'], $atts['player_id'], $atts['width'], $atts['height'] );
+		return BC_Utility::player( 'video', $atts['video_id'], $atts['account_id'], $atts['player_id'], $atts['width'], $atts['height'], $atts['autoplay'] );
 
 	}
 }

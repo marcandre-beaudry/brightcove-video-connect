@@ -805,7 +805,7 @@ class BC_Utility {
 	 *
 	 * @return string The HTML code for the player
 	 */
-	public static function player( $type, $id, $account_id, $player_id = 'default', $width = 0, $height = 0 ) {
+	public static function player( $type, $id, $account_id, $player_id = 'default', $width = 0, $height = 0, $autoplay = false ) {
 
 		// Sanitize and Verify.
 		$account_id = BC_Utility::sanitize_id( $account_id );
@@ -813,6 +813,7 @@ class BC_Utility {
 		$id         = BC_Utility::sanitize_id( $id );
 		$height     = (int) $height;
 		$width      = (int) $width;
+		$autoplay   = (bool) $autoplay;
 		$type       = ( 'playlist' === $type ) ? 'playlist' : 'video';
 
 		if ( 'playlist' === $type && 'default' === $player_id ) {

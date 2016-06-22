@@ -805,14 +805,19 @@ class BC_Utility {
 	 *
 	 * @return string The HTML code for the player
 	 */
-	public static function player( $type, $id, $account_id, $player_id = 'default', $width = 0, $height = 0 ) {
+	public static function player( $type, $atts ) {
 
 		// Sanitize and Verify.
-		$account_id = BC_Utility::sanitize_id( $account_id );
-		$player_id  = BC_Utility::sanitize_player_id( $player_id );
-		$id         = BC_Utility::sanitize_id( $id );
-		$height     = (int) $height;
-		$width      = (int) $width;
+		$atts['account_id'] = BC_Utility::sanitize_id( $atts['account_id'] );
+		$atts['player_id']  = BC_Utility::sanitize_player_id( $atts['player_id'] );
+        if (isset($atts['video_id'])) {
+            $idAttribute = "video_id";
+        } elseif (isset($atts['playlist_id'])) {
+            $idAttribute = "playlist_id";
+        }
+		$atts[$idAttribute]   = BC_Utility::sanitize_id( $atts[$idAttribute] );
+		$atts['height']     = (int) $atts['height'];
+		$atts['width']      = (int) $atts['width'];
 		$type       = ( 'playlist' === $type ) ? 'playlist' : 'video';
 
 		if ( 'playlist' === $type && 'default' === $player_id ) {
@@ -830,22 +835,22 @@ class BC_Utility {
 
 		$html = '<!-- Start of Brightcove Player -->';
 
-		if ( 0 === $width && 0 === $height ) {
+		if ( 0 === $atts['width'] && 0 === $atts['height'] ) {
 			$html .= '<div style="display: block; position: relative; max-width: 100%;"><div style="padding-top: 56.25%;">';
 		}
 
 		$html .= sprintf(
 			'<iframe src="//players.brightcove.net/%s/%s_default/index.html?%sId=%s" allowfullscreen="" webkitallowfullscreen="" mozallowfullscreen="" style="width: %s; height: %s;%s"></iframe>',
-			$account_id,
-			$player_id,
+			$atts['account_id'],
+			$atts['player_id'],
 			$type,
-			$id,
-			( 0 === $width ) ? '100%' : $width . 'px',
-			( 0 === $height ) ? '100%' : $height . 'px',
-			( 0 === $width && 0 === $height ) ? 'position: absolute; top: 0px; bottom: 0px; right: 0px; left: 0px;' : ''
+			$atts['video_id'],
+			( 0 === $atts['width'] ) ? '100%' : $atts['width'] . 'px',
+			( 0 === $atts['height'] ) ? '100%' : $atts['height'] . 'px',
+			( 0 === $atts['width'] && 0 === $atts['height'] ) ? 'position: absolute; top: 0px; bottom: 0px; right: 0px; left: 0px;' : ''
 		);
 
-		if ( 0 === $width && 0 === $height ) {
+		if ( 0 === $atts['width'] && 0 === $atts['height'] ) {
 			$html .= '</div></div>';
 		}
 
@@ -862,7 +867,7 @@ class BC_Utility {
 		 * @param int     $width      The Width to display.
 		 * @param int     $height     The height to display.
 		 */
-		$html = apply_filters( 'brightcove_video_html', $html, $type, $id, $account_id, $player_id, $width, $height );
+		$html = apply_filters( 'brightcove_video_html', $html, $type, $atts);
 
 		return $html;
 

@@ -30,6 +30,6 @@ class BC_Playlist_Shortcode {
 
 		$atts = shortcode_atts( $defaults, $atts, 'bc_playlist' );
 
-		return BC_Utility::player( 'playlist', $atts['playlist_id'], $atts['account_id'], $atts['player_id'], $atts['width'], $atts['height'] );
+		return BC_Utility::player( 'playlist', $atts );
 	}
 }
